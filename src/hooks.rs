@@ -98,6 +98,11 @@ impl HookDef {
                 shell,
                 task,
             } => {
+                if script.is_some() && run.is_some() {
+                    warn!(
+                        "hook definition has both 'script' and 'run', 'run' will take precedence"
+                    );
+                }
                 if script.is_none() && run.is_none() {
                     warn!("hook definition has neither 'script' nor 'run', skipping");
                     return vec![];

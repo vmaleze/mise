@@ -102,12 +102,9 @@ This is especially useful with [remote tasks](/tasks/remote-tasks)—you can def
 
 ### Environment variables
 
-Pre-task and post-task hooks are executed with the task's environment and working directory. The following additional environment variables are available:
+Pre-task and post-task hooks are executed with the task's environment and working directory. In addition to the [standard hook environment variables](#hook-execution), the following is also available:
 
 - `MISE_TASK_NAME`: The name of the task being executed.
-- `MISE_PROJECT_ROOT`: The root directory of the project.
-- `MISE_CONFIG_ROOT`: The root directory of the config file that defined the hook.
-- `MISE_ORIGINAL_CWD`: The original working directory of the user.
 
 ## Tool-level postinstall
 
@@ -145,7 +142,8 @@ Hooks are executed with the following environment variables set:
 
 - `MISE_ORIGINAL_CWD`: The directory that the user is in.
 - `MISE_PROJECT_ROOT`: The root directory of the project.
-- `MISE_PREVIOUS_DIR`: The directory that the user was in before the directory change (only if a directory change occurred).
+- `MISE_CONFIG_ROOT`: The root directory of the config file that defined the hook.
+- `MISE_PREVIOUS_DIR`: The directory that the user was in before the directory change (only for `enter`/`leave`/`cd` hooks).
 - `MISE_INSTALLED_TOOLS`: A JSON array of tools that were installed (only for `postinstall` hooks).
 - `MISE_TASK_NAME`: The name of the task being executed (only for `pre_task`/`post_task` hooks).
 
