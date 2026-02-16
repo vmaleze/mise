@@ -328,15 +328,17 @@ pub async fn run_task_hooks(
         }
         // Filter by task name if a task pattern is specified
         if let Some(ref task_pattern) = h.task
-            && !task_matches(task_pattern, task_name) {
-                continue;
-            }
+            && !task_matches(task_pattern, task_name)
+        {
+            continue;
+        }
         // Directory scope: only run if CWD is under the config root (unless global)
         if !h.global
             && let Some(cwd) = dirs::CWD.as_ref()
-                && !cwd.starts_with(root) {
-                    continue;
-                }
+            && !cwd.starts_with(root)
+        {
+            continue;
+        }
         trace!("running {hook_type} hook for task {task_name} in {root:?}");
         if let Err(e) = execute_task_hook(task_env, root, h, task_name, dir).await {
             warn!(
@@ -405,9 +407,10 @@ fn setup_hook_env(
     }
     // Add installed tools info for postinstall hooks
     if let Some(tools) = installed_tools
-        && let Ok(json) = serde_json::to_string(tools) {
-            env.insert("MISE_INSTALLED_TOOLS".to_string(), json);
-        }
+        && let Ok(json) = serde_json::to_string(tools)
+    {
+        env.insert("MISE_INSTALLED_TOOLS".to_string(), json);
+    }
     // Prevent recursive hook execution
     env.insert("MISE_NO_HOOKS".to_string(), "1".to_string());
 }
