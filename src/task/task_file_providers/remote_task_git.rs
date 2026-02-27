@@ -161,10 +161,11 @@ impl TaskFileProvider for RemoteTaskGit {
         match git_repo.clone(repo_structure.url_without_path.as_str(), clone_options) {
             Ok(()) => {
                 if destination.exists()
-                    && let Err(e) = crate::file::remove_all(&destination) {
-                        let _ = crate::file::remove_all(&tmp_destination);
-                        return Err(e);
-                    }
+                    && let Err(e) = crate::file::remove_all(&destination)
+                {
+                    let _ = crate::file::remove_all(&tmp_destination);
+                    return Err(e);
+                }
                 if let Err(e) = std::fs::rename(&tmp_destination, &destination) {
                     let _ = crate::file::remove_all(&tmp_destination);
                     return Err(eyre::eyre!(
