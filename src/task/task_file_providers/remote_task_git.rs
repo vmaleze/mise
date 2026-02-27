@@ -161,15 +161,18 @@ impl TaskFileProvider for RemoteTaskGit {
         match git_repo.clone(repo_structure.url_without_path.as_str(), clone_options) {
             Ok(()) => {
                 if destination.exists() {
-                    crate::file::remove_all(&destination)?;
+                    if let Err(e) = crate::file::remove_all(&destination) {
+                        let _ = crate::file::remove_all(&tmp_destination);
+                        return Err(e);
+                    }
                 }
-                std::fs::rename(&tmp_destination, &destination).map_err(|e| {
+                if let Err(e) = std::fs::rename(&tmp_destination, &destination) {
                     let _ = crate::file::remove_all(&tmp_destination);
-                    eyre::eyre!(
+                    return Err(eyre::eyre!(
                         "failed to move cloned repo into cache at {}: {e}",
                         display_path(&destination)
-                    )
-                })?;
+                    ));
+                }
             }
             Err(e) => {
                 let _ = crate::file::remove_all(&tmp_destination);
